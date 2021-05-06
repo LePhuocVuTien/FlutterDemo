@@ -31,15 +31,21 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var textToShow = "I Like Flutter";
   var isChange = true;
-  void _updateText() {
+  void _toggle() {
     setState(() {
       isChange = !isChange;
-      if (isChange) {
-        textToShow = "Flutter is Awesome";
-      } else {
-        textToShow = "I Like Flutter";
-      }
     });
+  }
+
+  _getToggleChild() {
+    if (isChange) {
+      return Text("Toggle One");
+    } else {
+      return CupertinoButton(
+        child: Text("Toggle Two"),
+        onPressed: () {},
+      );
+    }
   }
 
   @override
@@ -49,10 +55,10 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Text(textToShow),
+        child: _getToggleChild(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _updateText,
+        onPressed: _toggle,
         tooltip: 'Update Text',
         child: Icon(Icons.update_outlined),
       ),
