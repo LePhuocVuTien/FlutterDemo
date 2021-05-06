@@ -28,24 +28,16 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  var textToShow = "I Like Flutter";
-  var isChange = true;
-  void _toggle() {
-    setState(() {
-      isChange = !isChange;
-    });
-  }
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  AnimationController controller;
+  CurvedAnimation curve;
 
-  _getToggleChild() {
-    if (isChange) {
-      return Text("Toggle One");
-    } else {
-      return CupertinoButton(
-        child: Text("Toggle Two"),
-        onPressed: () {},
-      );
-    }
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+        duration: const Duration(milliseconds: 2000), vsync: this);
+    curve = CurvedAnimation(parent: controller, curve: Curves.easeIn);
   }
 
   @override
@@ -55,13 +47,25 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: _getToggleChild(),
-      ),
+          child: Container(
+              child: FadeTransition(
+                  opacity: curve,
+                  child: FlutterLogo(
+                    size: 100.0,
+                  )))),
       floatingActionButton: FloatingActionButton(
-        onPressed: _toggle,
-        tooltip: 'Update Text',
-        child: Icon(Icons.update_outlined),
+        tooltip: 'Fade',
+        child: Icon(Icons.brush),
+        onPressed: () {
+          controller.forward();
+        },
       ),
     );
+  }
+
+  @override
+  dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
